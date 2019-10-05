@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+</head>
+<body>
+	<input type="text" id="validity" onkeypress="myFunction()" placeholder="XX/XXXX" maxlength="7">
+
+	<script type="text/javascript">
+		function myFunction() {
+		  var date_validity = document.getElementById('validity').value;
+		  if(date_validity.length == 2){
+		  	document.getElementById('validity').value = date_validity +'/';
+		  }
+		}
+	</script>
+</body>
+</html>
