@@ -2,8 +2,9 @@ const http = require("http");
 const fs = require("fs");
 
 const server = http.createServer((req, res) => {
-  console.log("hello world");
-  console.log(req.url, req.method, req.headers);
+  //console.log("hello world");
+  /**Request */
+  //console.log(req.url, req.method, req.headers);
   /**this is for process exit or stop program */
   //   process.exit();
 
@@ -23,7 +24,19 @@ const server = http.createServer((req, res) => {
   }
 
   if (url === "/message" && method === "POST") {
-    fs.writeFileSync("message.txt", "Hello message");
+    const body = [];
+    req.on("data", chunk => {
+      console.log(chunk);
+      body.push(chunk);
+    });
+
+    req.on("end", () => {
+      const parseBody = Buffer.concat(body).toString();
+      console.log(parseBody);
+      const message = parseBody.split("=")[1];
+      fs.writeFileSync("message.txt", message);
+    });
+
     res.statusCode = 302;
     res.setHeader("Location", "/");
     return res.end();
