@@ -6,7 +6,14 @@ const exphbs = require("express-handlebars"); // this is for handlebars template
 
 const app = express();
 
-app.engine("hbs", exphbs({ defaultLayout: null })); // this is only for handlebars
+app.engine(
+  "hbs",
+  exphbs({
+    layoutsDir: "views/layouts/",
+    defaultLayout: "main-layout",
+    extname: ".hbs"
+  })
+); // this is only for handlebars. defaultLayout: null
 // app.engine(".hbs", expressHbs({ extname: ".hbs" }));
 // view engine added (PUG)
 //app.set("view engine", "pug");
