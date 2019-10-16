@@ -3,7 +3,6 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
-const db = require("./util/database");
 
 const app = express(); // this is only for handlebars. defaultLayout: null
 app.set("view engine", "ejs");
