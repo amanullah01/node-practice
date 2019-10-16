@@ -11,6 +11,15 @@ const app = express(); // this is only for handlebars. defaultLayout: null
 app.set("view engine", "ejs");
 app.set("views", "views"); // from views folder find my dynamic templates
 
+//middleware
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 // import from routes folder
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
@@ -30,9 +39,19 @@ User.hasMany(Product);
 //db
 //force: true delete all data
 sequelize
-  .sync({ force: true })
+  // .sync({ force: true })
+  .sync()
   .then(result => {
+    return User.findByPk(1);
     //console.log(result);
+  })
+  .then(user => {
+    if (!user) {
+      return User.create({ name: "Aman", email: "aman@softograph.com" });
+    }
+    return user;
+  })
+  .then(user => {
     app.listen(3000);
   })
   .catch(err => {
