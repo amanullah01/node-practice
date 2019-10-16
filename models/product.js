@@ -1,46 +1,30 @@
-// const fs = require("fs");
-// const path = require("path");
-const db = require("../util/database");
-const Cart = require("./cart");
+const Sequelize = require("sequelize");
 
-// const dir = require("../util/path");
+const sequelize = require("../util/database");
 
-// const filePath = path.join(dir, "data", "products.json");
-// const getProductsFromFile = cb => {
-//   fs.readFile(filePath, (err, fileContent) => {
-//     if (err) {
-//       return cb([]);
-//     } else {
-//       Object.keys(fileContent).length !== 0
-//         ? cb(JSON.parse(fileContent))
-//         : cb([]);
-//     }
-//   });
-// };
-
-module.exports = class Product {
-  constructor(id, title, imageUrl, description, price) {
-    this.id = id;
-    this.title = title;
-    this.imageUrl = imageUrl;
-    this.description = description;
-    this.price = price;
+const Product = sequelize.define("product", {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  price: {
+    type: Sequelize.DOUBLE,
+    allowNull: false
+  },
+  imageUrl: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false
   }
+});
 
-  save() {
-    return db.execute(
-      "INSERT INTO products (title,price,description,imageUrl) VALUES (?,?,?,?)",
-      [this.title, this.price, this.description, this.imageUrl]
-    );
-  }
-
-  static deleteById(id) {}
-
-  static fetchAll() {
-    return db.execute("SELECT * FROM Products");
-  }
-
-  static findById(id) {
-    return db.execute("SELECT * FROM products WHERE products.id = ?", [id]);
-  }
-};
+module.exports = Product;
