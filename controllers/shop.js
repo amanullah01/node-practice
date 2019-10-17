@@ -59,6 +59,11 @@ exports.getCart = (req, res, next) => {
   req.user
     .getCart()
     .then(cart => {
+      // console.log(cart);
+      // if (!cart) {
+      //   console.log("no cart found");
+      //   return res.redirect("/products");
+      // }
       return cart
         .getProducts()
         .then(products => {
