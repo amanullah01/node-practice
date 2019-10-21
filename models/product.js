@@ -2,12 +2,13 @@ const mongodb = require("mongodb");
 const getDb = require("../util/database").getDb;
 
 class Product {
-  constructor(title, price, description, imageUrl, id) {
+  constructor(title, price, description, imageUrl, id, userId) {
     this.title = title;
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
     this._id = id ? new mongodb.ObjectID(id) : null;
+    this.userId = userId;
   }
 
   // save data
@@ -26,7 +27,7 @@ class Product {
     return dbOp
       .then(result => {
         console.log("on save method result!!!");
-        console.log(result);
+        // console.log(result);
       })
       .catch(err => console.log(err));
   }
@@ -40,7 +41,7 @@ class Product {
       .toArray()
       .then(products => {
         console.log("get all products");
-        console.log(products);
+        // console.log(products);
         return products;
       })
       .catch(err => console.log(err));
