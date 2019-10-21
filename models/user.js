@@ -91,7 +91,7 @@ class User {
       .then(products => {
         const order = {
           items: products,
-          users: {
+          user: {
             _id: new ObjectID(this._id),
             name: this.name
           }
@@ -113,7 +113,10 @@ class User {
 
   getOrders() {
     const db = getDb();
-    // return
+    return db
+      .collection("orders")
+      .find({ "user._id": new ObjectID(this._id) })
+      .toArray();
   }
 
   static findById(userId) {
