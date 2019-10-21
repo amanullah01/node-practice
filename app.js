@@ -4,7 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database");
+const mongoConnect = require("./util/database").mongoConnect;
 
 const app = express(); // this is only for handlebars. defaultLayout: null
 app.set("view engine", "ejs");
@@ -18,6 +18,7 @@ app.use((req, res, next) => {
   //     next();
   //   })
   //   .catch(err => console.log(err));
+  next();
 });
 // import from routes folder
 const adminRoutes = require("./routes/admin");
