@@ -15,7 +15,7 @@ app.set("views", "views"); // from views folder find my dynamic templates
 app.use((req, res, next) => {
   User.findById("5dad7b210c144e1a5492922d")
     .then(user => {
-      req.user = user;
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch(err => console.log(err));
