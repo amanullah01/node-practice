@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
 const mongoConnect = require("./util/database").mongoConnect;
+const User = require("./models/user");
 
 const app = express(); // this is only for handlebars. defaultLayout: null
 app.set("view engine", "ejs");
@@ -12,12 +13,12 @@ app.set("views", "views"); // from views folder find my dynamic templates
 
 //middleware
 app.use((req, res, next) => {
-  // User.findByPk(1)
-  //   .then(user => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch(err => console.log(err));
+  User.findById("5dad7b210c144e1a5492922d")
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
   next();
 });
 // import from routes folder
@@ -33,7 +34,5 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 mongoConnect(client => {
-  console.log("app js mongoconnect.");
-  // console.log( client);
   app.listen(3000);
 });
