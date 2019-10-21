@@ -31,7 +31,7 @@ exports.getProduct = (req, res, next) => {
     .catch(err => console.log(err));
   */
 
-  Product.findByPk(prodId)
+  Product.findById(prodId)
     .then(product => {
       res.render("shop/product-details", {
         pageTitle: product.title,
@@ -43,7 +43,7 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then(products => {
       res.render("shop/index", {
         prods: products,
