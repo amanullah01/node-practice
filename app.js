@@ -33,6 +33,7 @@ app.use("/admin", adminRoutes);
 app.use(errorController.get404);
 
 mongoConnect(client => {
-  console.log(client);
+  console.log("app js mongoconnect.");
+  // console.log( client);
   app.listen(3000);
 });

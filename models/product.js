@@ -14,6 +14,7 @@ class Product {
       .collection("products")
       .insertOne(this)
       .then(result => {
+        console.log("on save method result!!!");
         console.log(result);
       })
       .catch(err => console.log(err));
