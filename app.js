@@ -40,15 +40,20 @@ app.use(
 );
 
 app.use((req, res, next) => {
+  console.log("checking...");
   if (!req.session.user) {
+    console.log("not block...");
     return next();
   }
+  console.log("out of not....");
   User.findById(req.session.user._id)
     .then(user => {
+      console.log("In user find by id....");
       req.user = user;
       next();
     })
     .catch(err => console.log(err));
+  console.log("out of user find by id....");
 });
 
 app.use("/admin", adminRoutes);
