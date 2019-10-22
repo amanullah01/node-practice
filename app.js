@@ -21,6 +21,14 @@ const store = new MongoDbStore({
 app.set("view engine", "ejs");
 app.set("views", "views"); // from views folder find my dynamic templates
 
+// import from routes folder
+const adminRoutes = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
+const authRoutes = require("./routes/auth");
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public"))); // for static file from public folder
+
 //middleware
 app.use(
   session({
@@ -32,20 +40,16 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  User.findById("5daeb00226e1173728b39fe0")
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
     .then(user => {
       req.user = user;
       next();
     })
     .catch(err => console.log(err));
 });
-// import from routes folder
-const adminRoutes = require("./routes/admin");
-const shopRoutes = require("./routes/shop");
-const authRoutes = require("./routes/auth");
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public"))); // for static file from public folder
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
