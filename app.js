@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const session = require("express-session");
 
 const errorController = require("./controllers/error");
 const User = require("./models/user");
@@ -12,6 +13,10 @@ app.set("view engine", "ejs");
 app.set("views", "views"); // from views folder find my dynamic templates
 
 //middleware
+app.use(
+  session({ secret: "my secret", resave: false, saveUninitialized: false })
+);
+
 app.use((req, res, next) => {
   User.findById("5daeb00226e1173728b39fe0")
     .then(user => {
