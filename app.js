@@ -4,17 +4,31 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const MongoDbStore = require("connect-mongodb-session")(session);
 
 const errorController = require("./controllers/error");
 const User = require("./models/user");
 
+const MONGODB_URI =
+  "mongodb+srv://aman:aman2626@cluster-node-practice-nqjyv.mongodb.net/shop?retryWrites=true&w=majority";
+
 const app = express(); // this is only for handlebars. defaultLayout: null
+const store = new MongoDbStore({
+  uri: MONGODB_URI,
+  collection: "sessions"
+});
+
 app.set("view engine", "ejs");
 app.set("views", "views"); // from views folder find my dynamic templates
 
 //middleware
 app.use(
-  session({ secret: "my secret", resave: false, saveUninitialized: false })
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+    store: store
+  })
 );
 
 app.use((req, res, next) => {
@@ -40,9 +54,7 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 mongoose
-  .connect(
-    "mongodb+srv://aman:aman2626@cluster-node-practice-nqjyv.mongodb.net/shop?retryWrites=true&w=majority"
-  )
+  .connect(MONGODB_URI)
   .then(result => {
     console.log("mongoose connected!!!!");
     User.findOne()
