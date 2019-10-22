@@ -2,9 +2,9 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database").mongoConnect;
 const User = require("./models/user");
 
 const app = express(); // this is only for handlebars. defaultLayout: null
@@ -32,6 +32,12 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(client => {
-  app.listen(3000);
-});
+mongoose
+  .connect(
+    "mongodb+srv://aman:aman2626@cluster-node-practice-nqjyv.mongodb.net/shop?retryWrites=true&w=majority"
+  )
+  .then(result => {
+    console.log("mongoose connected!!!!");
+    app.listen(3000);
+  })
+  .catch(err => console.log(err));
