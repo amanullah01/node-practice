@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sendGridTransport = require("nodemailer-sendgrid-transport");
@@ -8,8 +10,8 @@ const Uesr = require("../models/user");
 let transportGmail = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "aman@softograph.com",
-    pass: "do sth gr8"
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD
   }
 });
 
@@ -18,8 +20,7 @@ let transportGmail = nodemailer.createTransport({
 const transporter = nodemailer.createTransport(
   sendGridTransport({
     auth: {
-      api_key:
-        "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"
+      api_key:process.env.API_KEY
     }
   })
 );
