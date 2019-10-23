@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sendGridTransport = require("nodemailer-sendgrid-transport");
 
-const Uesr = require("../models/user");
+const User = require("../models/user");
 
 const transporter = nodemailer.createTransport(
   sendGridTransport({
@@ -40,7 +40,7 @@ exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   //   res.setHeader("Set-Cookie", "loggedIn=true");
-  Uesr.findOne({ email: email })
+  User.findOne({ email: email })
     .then(user => {
       if (!user) {
         req.flash("error", "Invalid email or password.");
@@ -74,7 +74,7 @@ exports.postSignup = (req, res, next) => {
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
 
-  Uesr.findOne({ email: email })
+  User.findOne({ email: email })
     .then(userDoc => {
       if (userDoc) {
         req.flash("error", "E-mail exists already, Please pick different one.");
@@ -84,7 +84,7 @@ exports.postSignup = (req, res, next) => {
       return bcrypt
         .hash(password, 12)
         .then(hasPassword => {
-          const user = new Uesr({
+          const user = new User({
             email: email,
             password: hasPassword,
             cart: { items: [] }
@@ -136,10 +136,14 @@ exports.postReset = (req, res, next) => {
     const token = buffer.toString("hex");
     User.findOne({ email: req.body.email })
       .then(user => {
+        console.log("user block");
+        console.log(user);
         if (!user) {
+          console.log("not block");
           req.flash("error", "No account with this email found");
           return res.redirect("/reset");
         }
+        console.log("out of not");
         user.resetToken = token;
         user.resetTokenExpiration = Date.now() + "3600000";
         return user.save();
