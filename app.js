@@ -66,21 +66,6 @@ mongoose
   .connect(MONGODB_URI)
   .then(result => {
     console.log("mongoose connected!!!!");
-    User.findOne()
-      .then(user => {
-        if (!user) {
-          const user = new User({
-            name: "Amanullah Aman",
-            email: "aman@softograph.com",
-            cart: {
-              items: []
-            }
-          });
-          user.save();
-        }
-      })
-      .catch(err => console.log(err));
-
     app.listen(3000);
   })
   .catch(err => console.log(err));
