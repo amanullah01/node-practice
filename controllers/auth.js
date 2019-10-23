@@ -5,16 +5,14 @@ const Uesr = require("../models/user");
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
     pageTitle: "Login Page",
-    path: "/login",
-    isAuthenticated: false
+    path: "/login"
   });
 };
 
 exports.getSignup = (req, res, next) => {
   res.render("auth/signup", {
     path: "/signup",
-    pageTitle: "Signup",
-    isAuthenticated: false
+    pageTitle: "Signup"
   });
 };
 
