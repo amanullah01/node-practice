@@ -4,6 +4,17 @@ const sendGridTransport = require("nodemailer-sendgrid-transport");
 
 const Uesr = require("../models/user");
 
+//smtp gmail
+let transportGmail = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "aman@softograph.com",
+    pass: "do sth gr8"
+  }
+});
+
+//sendgrid
+/*
 const transporter = nodemailer.createTransport(
   sendGridTransport({
     auth: {
@@ -12,6 +23,7 @@ const transporter = nodemailer.createTransport(
     }
   })
 );
+*/
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
@@ -93,15 +105,19 @@ exports.postSignup = (req, res, next) => {
           // req.flash("error", "Invalid email or password.");
           let url = req.headers.host + "/login";
           res.redirect("/login");
-          return transporter.sendMail({
-            to: email,
-            from: "aman@softograph.com",
-            subject: "Shop signup html page",
-            html:
-              "<p>Thank you for sign up at our system. You can shop now. You can login now from here.<a href='" +
-              url +
-              "'>Login</a></p>"
-          });
+          return transportGmail
+            .sendMail({
+              to: email,
+              from: "aman@softograph.com",
+              subject: "Shop signup html page",
+              html:
+                "<p>Thank you for sign up at our system. You can shop now. You can login now from here.<a href='" +
+                url +
+                "'>Login</a></p>"
+            })
+            .catch(err => {
+              console.log("email error", err);
+            });
         })
         .catch(err => console.log(err));
     })
