@@ -1,4 +1,5 @@
 require("dotenv").config();
+const crypto = require("crypto");
 
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
@@ -151,21 +152,18 @@ exports.postReset = (req, res, next) => {
     const token = buffer.toString("hex");
     User.findOne({ email: req.body.email })
       .then(user => {
-        console.log("user block");
         console.log(user);
         if (!user) {
-          console.log("not block");
           req.flash("error", "No account with this email found");
           return res.redirect("/reset");
         }
-        console.log("out of not");
         user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + "3600000";
+        user.resetTokenExpiration = Date.now() + 3600000;
         return user.save();
       })
       .then(result => {
         res.redirect("/");
-        transporter.sendMail({
+        transportGmail.sendMail({
           to: req.body.email,
           from: "aman@softograph.com",
           subject: "Password reset | Shop",
