@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+require("dotenv").config();
 
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
@@ -6,14 +6,25 @@ const sendGridTransport = require("nodemailer-sendgrid-transport");
 
 const User = require("../models/user");
 
+//smtp gmail
+let transportGmail = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD
+  }
+});
+
+//sendgrid
+/*
 const transporter = nodemailer.createTransport(
   sendGridTransport({
     auth: {
-      api_key:
-        "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"
+      api_key:process.env.API_KEY
     }
   })
 );
+*/
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
@@ -95,15 +106,19 @@ exports.postSignup = (req, res, next) => {
           // req.flash("error", "Invalid email or password.");
           let url = req.headers.host + "/login";
           res.redirect("/login");
-          return transporter.sendMail({
-            to: email,
-            from: "aman@softograph.com",
-            subject: "Shop signup html page",
-            html:
-              "<p>Thank you for sign up at our system. You can shop now. You can login now from here.<a href='" +
-              url +
-              "'>Login</a></p>"
-          });
+          return transportGmail
+            .sendMail({
+              to: email,
+              from: "aman@softograph.com",
+              subject: "Shop signup html page",
+              html:
+                "<p>Thank you for sign up at our system. You can shop now. You can login now from here.<a href='" +
+                url +
+                "'>Login</a></p>"
+            })
+            .catch(err => {
+              console.log("email error", err);
+            });
         })
         .catch(err => console.log(err));
     })
