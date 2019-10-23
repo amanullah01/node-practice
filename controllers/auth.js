@@ -43,18 +43,19 @@ exports.postSignup = (req, res, next) => {
         return res.redirect("/signup");
       }
 
-      return bcrypt.hash(password, 12);
-    })
-    .then(hasPassword => {
-      const user = new Uesr({
-        email: email,
-        password: hasPassword,
-        cart: { items: [] }
-      });
-      return user.save();
-    })
-    .then(result => {
-      res.redirect("/login");
+      return bcrypt
+        .hash(password, 12)
+        .then(hasPassword => {
+          const user = new Uesr({
+            email: email,
+            password: hasPassword,
+            cart: { items: [] }
+          });
+          return user.save();
+        })
+        .then(result => {
+          res.redirect("/login");
+        });
     })
     .catch(err => console.log(err));
 };
