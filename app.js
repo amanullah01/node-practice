@@ -61,6 +61,13 @@ app.use((req, res, next) => {
   console.log("out of user find by id....");
 });
 
+//csrf and login session check
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
