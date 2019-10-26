@@ -29,7 +29,14 @@ router.post(
       "Please enter a password only number and text and at least 5 character long"
     )
       .isLength({ min: 5 })
-      .isAlphanumeric()
+      .isAlphanumeric(),
+    body("confirmPassword").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passowrd have to match");
+      } else {
+        return true;
+      }
+    })
   ],
   authController.postSignup
 );
