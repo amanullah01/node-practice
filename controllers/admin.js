@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const Product = require("../models/product");
 const { validationResult } = require("express-validator/check");
 
@@ -39,7 +39,7 @@ exports.postAddProduct = (req, res, next) => {
   }
 
   const product = new Product({
-    _id: mongoose.Types.ObjectId("5daea9d563fe4e37dc8deceb"),
+    // _id: mongoose.Types.ObjectId("5daea9d563fe4e37dc8deceb"),
     title: title,
     price: price,
     description: description,
