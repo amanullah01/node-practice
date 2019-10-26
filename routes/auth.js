@@ -15,7 +15,14 @@ router.post(
   "/signup",
   check("email")
     .isEmail()
-    .withMessage("Please enter a valid email"),
+    .withMessage("Please enter a valid email")
+    .custom((value, req) => {
+      if (value === "aman@softograph.com") {
+        throw new Error("This email is not supported");
+      } else {
+        return true;
+      }
+    }),
   authController.postSignup
 );
 
