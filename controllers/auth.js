@@ -66,6 +66,7 @@ exports.postLogin = (req, res, next) => {
   const password = req.body.password;
   //   res.setHeader("Set-Cookie", "loggedIn=true");
   const errors = validationResult(req);
+  console.log(errors.array());
 
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/login", {
@@ -80,12 +81,15 @@ exports.postLogin = (req, res, next) => {
     });
   }
 
+  console.log(email);
+
   User.findOne({ email: email })
     .then(user => {
+      console.log(user);
       if (!user) {
         return res.status(422).render("auth/login", {
           path: "/login",
-          pageTitle: "Login Page",
+          pageTitle: "Login Page not user",
           errorMessage: "Invalid email or password.",
           oldInput: {
             email: email,
@@ -107,7 +111,7 @@ exports.postLogin = (req, res, next) => {
           }
           return res.status(422).render("auth/login", {
             path: "/login",
-            pageTitle: "Login Page",
+            pageTitle: "Login Page do not match",
             errorMessage: "Invalid email or password.",
             oldInput: {
               email: email,
