@@ -2,6 +2,7 @@ const express = require("express");
 const { check, body } = require("express-validator/check");
 
 const authController = require("../controllers/auth");
+const User = require("../models/user");
 
 const router = express.Router();
 
@@ -18,11 +19,18 @@ router.post(
       .isEmail()
       .withMessage("Please enter a valid email")
       .custom((value, req) => {
-        if (value === "aman@softograph.com") {
-          throw new Error("This email is not supported");
-        } else {
-          return true;
-        }
+        // if (value === "aman@softograph.com") {
+        //   throw new Error("This email is not supported");
+        // } else {
+        //   return true;
+        // }
+        return User.findOne({ email: value }).then(userDoc => {
+          if (userDoc) {
+            return Promise.reject(
+              "E-mail exists already, Please pick different one."
+            );
+          }
+        });
       }),
     body(
       "password",

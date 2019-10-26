@@ -98,42 +98,33 @@ exports.postSignup = (req, res, next) => {
     });
   }
 
-  User.findOne({ email: email })
-    .then(userDoc => {
-      if (userDoc) {
-        req.flash("error", "E-mail exists already, Please pick different one.");
-        return res.redirect("/signup");
-      }
-
-      return bcrypt
-        .hash(password, 12)
-        .then(hasPassword => {
-          const user = new User({
-            email: email,
-            password: hasPassword,
-            cart: { items: [] }
-          });
-          return user.save();
+  bcrypt
+    .hash(password, 12)
+    .then(hasPassword => {
+      const user = new User({
+        email: email,
+        password: hasPassword,
+        cart: { items: [] }
+      });
+      return user.save();
+    })
+    .then(result => {
+      // req.flash("error", "Invalid email or password.");
+      let url = req.headers.host + "/login";
+      res.redirect("/login");
+      return transportGmail
+        .sendMail({
+          to: email,
+          from: "aman@softograph.com",
+          subject: "Shop signup html page",
+          html:
+            "<p>Thank you for sign up at our system. You can shop now. You can login now from here.<a href='" +
+            url +
+            "'>Login</a></p>"
         })
-        .then(result => {
-          // req.flash("error", "Invalid email or password.");
-          let url = req.headers.host + "/login";
-          res.redirect("/login");
-          return transportGmail
-            .sendMail({
-              to: email,
-              from: "aman@softograph.com",
-              subject: "Shop signup html page",
-              html:
-                "<p>Thank you for sign up at our system. You can shop now. You can login now from here.<a href='" +
-                url +
-                "'>Login</a></p>"
-            })
-            .catch(err => {
-              console.log("email error", err);
-            });
-        })
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log("email error", err);
+        });
     })
     .catch(err => console.log(err));
 };
